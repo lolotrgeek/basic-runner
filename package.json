@@ -1,0 +1,16 @@
+{
+  "name": "basic-runner",
+  "version": "0.0.1",
+  "description": "",
+  "main": "runner.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "lolotrgeek",
+  "license": "MIT",
+  "dependencies": {
+    "basic-log": "github:lolotrgeek/basic-log",
+    "basic-store": "github:lolotrgeek/basic-store",
+    "ifttt-message": "github:lolotrgeek/ifttt-message"
+  }
+}
