@@ -9,6 +9,7 @@ const action = () => ({next: "something", key:"unique_key"})
 const execute = item => ({done: "type", key: item.key})
 
 const runner = new Runner(action, execute)
+runner.run()
 
 ```
 
