@@ -1,4 +1,4 @@
-const { Runner } = require("../runner");
+const { Runner } = require("../src/runner");
 const { randomUUID } = require('crypto')
 
 const action = () => {
