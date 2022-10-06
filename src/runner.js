@@ -80,7 +80,7 @@ class Runner {
 
     async end(previous) {
         log("---End---", true)
-        send({ message: "Broker stopped." })
+        send({ message: "Runner stopped." })
         this.node.send("done", previous, 500)
         if (previous) log(previous, true)
         else {
