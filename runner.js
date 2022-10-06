@@ -31,7 +31,7 @@ class Runner {
             return await this.end(resolved)
         }
         else if (resolved.next) {
-            log(`Next: ${resolved.key} ${resolved.next}`)
+            log(`Next: ${resolved.key} ${resolved.next}`, true)
             await this.next_store.set(resolved.key, resolved)
             this.node.send("next", resolved, 500)
         }
@@ -41,7 +41,7 @@ class Runner {
             await this.next_store.delete(resolved.key)
             this.node.send("done", resolved, 500)
         }
-        return setTimeout(async () => await this.step(), 5000)
+        
     }
     hasNexts = next_items => typeof next_items === 'object' && Array.isArray(next_items) && next_items.length > 0
 
@@ -60,8 +60,10 @@ class Runner {
         }
         if (this.hasNexts(next)) {
             log("Resolving...", true)
+            log({next}, true)
             this.node.send("nexts", next, 500)
             await Promise.allSettled(next.map(async item => await this.resolver(item)))
+            return setTimeout(async () => await this.step(), 5000)
         }
         else {
             log("Action...", true)

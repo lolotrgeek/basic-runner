@@ -3,7 +3,7 @@ const { randomUUID } = require('crypto')
 
 const action = () => {
     let actions = [{ key: randomUUID(), next: "hello", count: 0 }, { key: randomUUID(), next: "world", count: 0 }]
-    console.log("actions: ", actions)
+    // console.log("actions: ", actions)
     return actions
 }
 const execute = item => {
