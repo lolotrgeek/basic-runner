@@ -1,4 +1,4 @@
-const { Node } = require("basic")
+const { Node } = require("basic-messaging")
 const { Store } = require("basic-store")
 const { send } = require("ifttt-message")
 const { log } = require("basic-log")
