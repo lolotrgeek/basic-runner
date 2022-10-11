@@ -9,8 +9,8 @@
   "author": "lolotrgeek",
   "license": "MIT",
   "dependencies": {
-    "basic": "github:lolotrgeek/Basic",
     "basic-log": "github:lolotrgeek/basic-log",
+    "basic-messaging": "^1.3.0",
     "basic-store": "github:lolotrgeek/basic-store",
     "ifttt-message": "github:lolotrgeek/ifttt-message"
   }
