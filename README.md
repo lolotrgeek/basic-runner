@@ -1,6 +1,9 @@
 # Basic Runner
 Takes an action or set of actions and runs them until they are resolved.
 
+## Why?
+Sometimes we need to ensure that an action is completed. This module does that by performing an action or actions then iteratively checking for completion. It blocks any new actions until all old actions have been resolved.
+
 ## Usage
 ```
 const { Runner } = require("../src/runner")
