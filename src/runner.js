@@ -6,6 +6,7 @@ const noop = () => { }
 
 class Runner {
     constructor(action, execute, limit, initialize) {
+        this.debug = false
         this.action = typeof action === 'function' ? action : noop
         this.limit = typeof limit === 'function' ? limit : noop
         this.execute = typeof execute === 'function' ? execute : noop
@@ -22,7 +23,7 @@ class Runner {
     async resolver(item) {
         let resolved = await this.execute(item)
         if (!resolved) {
-            log({ error: "un_resolvable" }, true)
+            log({ error: "un_resolvable" }, this.debug)
             await this.done_store.set(Date.now(), { error: "un_resolvable" })
             return await this.end({ error: "un_resolvable" })
         }
@@ -31,12 +32,12 @@ class Runner {
             return await this.end(resolved)
         }
         else if (resolved.next) {
-            log(`Next: ${resolved.key} ${resolved.next}`, true)
+            log(`Next: ${resolved.key} ${resolved.next}`, this.debug)
             await this.next_store.set(resolved.key, resolved)
             this.node.send("next", resolved, 500)
         }
         else if (resolved.done) {
-            log(`Done: ${resolved.key} ${resolved.done}`, true)
+            log(`Done: ${resolved.key} ${resolved.done}`, this.debug)
             await this.done_store.set(resolved.key, resolved)
             await this.next_store.delete(resolved.key)
             this.node.send("done", resolved, 500)
@@ -46,8 +47,8 @@ class Runner {
     hasNexts = next_items => typeof next_items === 'object' && Array.isArray(next_items) && next_items.length > 0
 
     async step(next) {
-        log("Step...", true)
-        log({ next })
+        log("Step...", this.debug)
+        log({ next }, this.debug)
         let max_calls = this.limit()
         if (max_calls) {
             // Will check if we're good to go every 8 seconds, once limit is lifted will resume step
@@ -59,14 +60,14 @@ class Runner {
             next = await this.next_store.get_all_values()
         }
         if (this.hasNexts(next)) {
-            log("Resolving...", true)
-            log({next}, true)
+            log("Resolving...", this.debug)
+            log({next}, this.debug)
             this.node.send("nexts", next, 500)
             await Promise.allSettled(next.map(async item => await this.resolver(item)))
             return setTimeout(async () => await this.step(), 5000)
         }
         else {
-            log("Action...", true)
+            log("Action...", this.debug)
             let next_items = await this.action()
             return setTimeout(async () => await this.step(next_items), 5000)
         }
