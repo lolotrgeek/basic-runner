@@ -34,13 +34,13 @@ class Runner {
         else if (resolved.next) {
             log(`Next: ${resolved.key} ${resolved.next}`, this.debug)
             await this.next_store.set(resolved.key, resolved)
-            this.node.send("next", resolved, 500)
+            this.node.send("next", resolved)
         }
         else if (resolved.done) {
             log(`Done: ${resolved.key} ${resolved.done}`, this.debug)
             await this.done_store.set(resolved.key, resolved)
             await this.next_store.delete(resolved.key)
-            this.node.send("done", resolved, 500)
+            this.node.send("done", resolved)
         }
         
     }
@@ -62,7 +62,7 @@ class Runner {
         if (this.hasNexts(next)) {
             log("Resolving...", this.debug)
             log({next}, this.debug)
-            this.node.send("nexts", next, 500)
+            this.node.send("nexts", next)
             await Promise.allSettled(next.map(async item => await this.resolver(item)))
             return setTimeout(async () => await this.step(), 5000)
         }
@@ -82,7 +82,7 @@ class Runner {
     async end(previous) {
         log("---End---", true)
         send({ message: "Runner stopped." })
-        this.node.send("done", previous, 500)
+        this.node.send("done", previous)
         if (previous) log(previous, true)
         else {
             let dones = await this.done_store.get_all_values()
